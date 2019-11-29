@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">HR Incident Reporting</string>
+    <string name="grading_app">Grading App</string>
+    <string name="id">Incident Id</string>
+    <string name="incident_date">Incident Date</string>
+    <string name="employee_number">Employee #</string>
+    <string name="employee_name">Employee Name</string>
+    <string name="gender">Gender</string>
+    <string name="add">ADD</string>
+    <string name="view_data">VIEW DATA</string>
+    <string name="search_by_id">Search by ID</string>
+    <string name="search_by_prog_code">Search by Prog Code</string>
+    <string name="delete">DELETE</string>
+    <string name="update">UPDATE</string>
+    <string name="shift">Shift</string>
+    <string name="department">Department</string>
+    <string name="position">Position</string>
+    <string name="injured_body_part">Injured Body Part</string>
+    <string name="report_incident">Report Incident</string>
+</resources>

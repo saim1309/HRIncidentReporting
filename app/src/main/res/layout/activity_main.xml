@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout   xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools = "http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context = ".MainActivity">
+
+    <fragment
+        android:id="@+id/reportIncidentFragment"
+        android:name="com.example.hrincidentreporting.ReportIncident"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewIncidentFragment"
+        android:name="com.example.hrincidentreporting.ViewIncidents"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+    </fragment>
+
+    <LinearLayout
+        android:id="@+id/idLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/reportIncidentBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorPrimary"
+            android:text="Report Incident"
+            android:onClick="onChangeFragment"
+            android:focusable="true"
+            android:textColor="@android:color/white" />
+
+        <!-- Update Records Button -->
+        <Button
+            android:id="@+id/viewIncidentBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorPrimary"
+            android:text="View Incidents"
+            android:onClick="onChangeFragment"
+            android:focusable="true"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</RelativeLayout>
