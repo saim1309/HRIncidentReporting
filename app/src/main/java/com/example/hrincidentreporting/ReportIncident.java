@@ -39,7 +39,7 @@ public class ReportIncident extends Fragment {
     Button btn_Report_Incident, btn_ViewData;
     RadioButton male,female;
     RadioGroup radioGroupGender;
-    EmployeeRecord a;
+    EmployeeRecord a = null;
     boolean radioBtnChk = false;
     ImageView img;
     String genderSelection,incidentSelection,shifSelection,currentDate,employeeNumber;

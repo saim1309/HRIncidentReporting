@@ -22,25 +22,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("drop table if exists Employee");
         db.execSQL(EmployeeRecord.CREATE_EMPLOYEE_RECORD_TABLE);
+        db.execSQL(IncidentHistoryRecord.CREATE_INCIDENT_HISTORY_RECORD_TABLE);
         insertRecord("Zeefa Karim","RPA","RPA Architect");
         insertRecord("Chaitnaya","API","API Designer");
         insertRecord("Saim Ahmad","Android","Android Developer");
 
-//
-//        db.execSQL("drop table if exists tbl_IncidentHistory");
-//        db.execSQL(IncidentHistoryRecord.CREATE_INCIDENT_HISTORY_RECORD_TABLE);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(String.format("DROP TABLE IF EXISTS %s", EmployeeRecord.CREATE_EMPLOYEE_RECORD_TABLE));
+        //db.execSQL(String.format("DROP TABLE IF EXISTS %s", IncidentHistoryRecord.CREATE_INCIDENT_HISTORY_RECORD_TABLE));
 
         // Create tables again
         onCreate(db);

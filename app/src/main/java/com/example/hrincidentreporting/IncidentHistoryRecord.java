@@ -33,16 +33,18 @@ public class IncidentHistoryRecord {
     public static final String CREATE_INCIDENT_HISTORY_RECORD_TABLE =
             "CREATE TABLE IF NOT EXISTS " + RECORD_TABLE_NAME + "("
                     + COLUMN_INCIDENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COLUMN_EMPLOYEE_NUMBER + "INTEGER,"
+                    + COLUMN_EMPLOYEE_NUMBER + " INTEGER,"
                     + COLUMN_EMPLOYEE_NAME + " VARCHAR(40),"
-                    + COLUMN_INCIDENT_DATE + "VARCHAR(40),"
-                    + COLUMN_GENDER + "VARCHAR(40),"
+                    + COLUMN_INCIDENT_DATE + " VARCHAR(40),"
+                    + COLUMN_GENDER + " VARCHAR(40),"
                     + COLUMN_DEPARTMENT + " VARCHAR(40),"
-                    + COLUMN_SHIFT + "VARCHAR(40),"
+                    + COLUMN_SHIFT + " VARCHAR(40),"
                     + COLUMN_POSITION + " VARCHAR(40),"
-                    + COLUMN_INCIDENT_TYPE + "VARCHAR(40),"
-                    + COLUMN_INJURED_BODY_PART + "VARCHAR(40)"
+                    + COLUMN_INCIDENT_TYPE + " VARCHAR(40),"
+                    + COLUMN_INJURED_BODY_PART + " VARCHAR(40)"
                     + ")";
+
+
 
 
     public IncidentHistoryRecord(){ }
