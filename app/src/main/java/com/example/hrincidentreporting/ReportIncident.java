@@ -199,6 +199,10 @@ public class ReportIncident extends Fragment {
             //gets all the fields value present on Report Incident Page and save it in String Builder
             sb = reportIncidentDetails(sb);
 
+            db.insertRecordIncident(employeeNumber,a.getEmployeeName(),genderSelection,a.getDepartment(),shifSelection, a.getPosition(),"head",incidentSelection
+            );
+
+
             Intent i = new Intent(Intent.ACTION_SEND);
             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"chaitanyauttarwar046@gmail.com","Zzeefakarim5334@conestogac.on.ca"});     //setting up the email
             i.putExtra(Intent.EXTRA_SUBJECT, "HR Incident Reporting");                //Initializing the Email Subject
@@ -236,8 +240,8 @@ public class ReportIncident extends Fragment {
         sb.append("Incident Type : "+incidentSelection);
         sb.append(System.getProperty("line.separator"));
 //            need to get body part from table which will be prepared later
-//            sb.append("Injured Body Part : "+bodyPartSelection);
-//            sb.append(System.getProperty("line.separator"));
+        sb.append("Injured Body Part : Head");
+        sb.append(System.getProperty("line.separator"));
 
         return sb;
     }

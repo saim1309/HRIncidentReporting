@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public boolean insertRecordIncident(String incidentDate, int employeeNumber, String employeeName, String gender,
+    public boolean insertRecordIncident(String employeeNumber, String employeeName, String gender,
                                         String department, String shift, String position, String injuredBodyPart, String incidentType){
         //getting WritableDatabase permission to write into the DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //using ContentValues to put values to the columns
         ContentValues recordValues = new ContentValues();
 
-        recordValues.put(IncidentHistoryRecord.COLUMN_INCIDENT_DATE,incidentDate);
+        //recordValues.put(IncidentHistoryRecord.COLUMN_INCIDENT_DATE,incidentDate);
         recordValues.put(IncidentHistoryRecord.COLUMN_EMPLOYEE_NUMBER,employeeNumber);
         recordValues.put(IncidentHistoryRecord.COLUMN_EMPLOYEE_NAME,employeeName);
         recordValues.put(IncidentHistoryRecord.COLUMN_GENDER,gender);
