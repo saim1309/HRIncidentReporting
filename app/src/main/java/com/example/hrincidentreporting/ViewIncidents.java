@@ -29,15 +29,15 @@ public class ViewIncidents extends Fragment {
         Cursor res = db.getAllReportRecords();
         while (res.moveToNext()){
             tvViewIncident.append("ID: " +res.getString(0)+ "\n");
-            tvViewIncident.append("DATE: " +res.getString(1)+ "\n");
-            tvViewIncident.append("EMP_NUM: " +res.getString(2)+ "\n");
-            tvViewIncident.append("EMP_NAME: " +res.getString(3)+ "\n");
+            tvViewIncident.append("EMP_NUMBER: " +res.getString(1)+ "\n");
+            tvViewIncident.append("EMP_NAME: " +res.getString(2)+ "\n");
+            tvViewIncident.append("DATE: " +res.getString(3)+ "\n");
             tvViewIncident.append("GENDER: " +res.getString(4)+ "\n");
-            tvViewIncident.append("SHIFT: " +res.getString(5)+ "\n");
-            tvViewIncident.append("DEPARTMENT: " +res.getString(6)+ "\n");
+            tvViewIncident.append("DEPARTMENT: " +res.getString(5)+ "\n");
+            tvViewIncident.append("SHIFT: " +res.getString(6)+ "\n");
             tvViewIncident.append("POSITION: " +res.getString(7)+ "\n");
             tvViewIncident.append("INCIDENT_TYPE: " +res.getString(8)+ "\n");
-            tvViewIncident.append("INCIDENT_BODYPART: " +res.getString(9)+ "\n\n");
+            tvViewIncident.append("INCIDENT_BODY_PART: " +res.getString(9)+ "\n\n");
         }
 
 
