@@ -23,9 +23,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists Employee");
         db.execSQL(EmployeeRecord.CREATE_EMPLOYEE_RECORD_TABLE);
         db.execSQL(IncidentHistoryRecord.CREATE_INCIDENT_HISTORY_RECORD_TABLE);
+
         insertRecord("Zeefa Karim","RPA","RPA Architect");
         insertRecord("Chaitnaya","API","API Designer");
         insertRecord("Saim Ahmad","Android","Android Developer");
+
+//        db.execSQL("drop table if exists tbl_BodyParts");
+//        db.execSQL(BodyParts.CREATE_BODY_PART_TABLE);
+
+        //insertRecordBodyParts();
+
 
     }
 
@@ -95,6 +102,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         long recordId = db.insert(IncidentHistoryRecord.RECORD_TABLE_NAME, null, recordValues);
+
+        db.close();
+
+        if(recordId == -1){
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public boolean insertRecordBodyParts(int bodyPartId,String bodyPartName){
+        //getting WritableDatabase permission to write into the DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //using ContentValues to put values to the columns
+        ContentValues recordValues = new ContentValues();
+
+        recordValues.put(BodyParts.COLUMN_BODY_PART_ID,bodyPartId);
+        recordValues.put(BodyParts.COLUMN_BODY_PART_NAME,bodyPartName);
+
+
+        long recordId = db.insert(EmployeeRecord.RECORD_TABLE_NAME, null, recordValues);
 
         db.close();
 
