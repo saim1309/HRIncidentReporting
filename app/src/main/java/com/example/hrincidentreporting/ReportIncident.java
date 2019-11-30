@@ -34,15 +34,16 @@ import static android.app.Activity.RESULT_OK;
 public class ReportIncident extends Fragment {
     private String[] shiftArray = {"shiftA", "shiftB", "shiftC"};
     private String[] incidentTypeArray = {"Near Miss", "First Aid", "Medical Aid"};
-    Spinner shiftSpinner, incidentTypeSpinner;
+    Spinner shiftSpinner, incidentTypeSpinner, injuredBodyPartSpiner;
     EditText editTextDate, name, department, position, emp_no;
-    Button btn_Report_Incident, btn_ViewData;
+    Button btn_Report_Incident, btn_ViewData, btn_IncdntData, btn_BodyData;
     RadioButton male,female;
     RadioGroup radioGroupGender;
     EmployeeRecord a = null;
+    Cursor cal;
     boolean radioBtnChk = false;
     ImageView img;
-    String genderSelection,incidentSelection,shifSelection,currentDate,employeeNumber;
+    String genderSelection,incidentSelection,shifSelection,currentDate,employeeNumber,bodyPartSelection;
     StringBuilder sb;
     static final int CAM_REQUEST = 1;
     Uri imageUri;
@@ -62,7 +63,7 @@ public class ReportIncident extends Fragment {
         //finding the spinner for shift and incidentTypeSpinner
         shiftSpinner = view.findViewById(R.id.spinnerShift);
         incidentTypeSpinner = view.findViewById(R.id.spinnerIncidentType);
-        img = view.findViewById(R.id.img_photo);
+        //img = view.findViewById(R.id.img_photo);
         btn_ViewData = (Button) view.findViewById(R.id.btn_ViewData);
         db = new DatabaseHelper(getActivity());
         name = view.findViewById(R.id.edtEmployeeName);
@@ -72,6 +73,9 @@ public class ReportIncident extends Fragment {
         emp_no = view.findViewById(R.id.edtEmployeeNumber);
         btn_Report_Incident = view.findViewById(R.id.btnOrder);
         editTextDate = view.findViewById(R.id.edtIncidentDate);
+        btn_BodyData = view.findViewById(R.id.btn_BodyData);
+        btn_IncdntData = view.findViewById(R.id.btn_IncdntData);
+        injuredBodyPartSpiner = view.findViewById(R.id.spinnerInjuredBodypart);
 
 
 
@@ -107,6 +111,25 @@ public class ReportIncident extends Fragment {
             }
         });
 
+        ArrayAdapter bodyPartSpinnerList = new ArrayAdapter(getActivity().getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item,incidentTypeArray);
+        bodyPartSpinnerList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        injuredBodyPartSpiner.setAdapter(bodyPartSpinnerList);
+
+        injuredBodyPartSpiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                bodyPartSelection = injuredBodyPartSpiner.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        //check what gender was selected
         radioGroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -129,7 +152,7 @@ public class ReportIncident extends Fragment {
         });
 
 
-
+        //check which incident was choosen
         incidentTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -147,20 +170,75 @@ public class ReportIncident extends Fragment {
         //creating a new DatabaseHelper object
         db = new DatabaseHelper(getActivity().getApplicationContext());
 
+        //view data from Employee Table
+        btn_ViewData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal= db.getAllEmpRecords();
+                if(cal.getCount()==0)
+                {
+                    showStatus("Information", "No record Found");
+                }
+                else{
+                    StringBuffer bfr;
+                    bfr = showEmpRecords(cal);
+                    showStatus("Data",bfr.toString());
+                }
 
+            }
+        });
+
+        //view data from Body Table
+        btn_BodyData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cal= db.getAllBodyRecords();
+                if(cal.getCount()==0)
+                {
+                    showStatus("Information", "No record Found");
+                }
+                else{
+                    StringBuffer bfr;
+                    bfr = showBodyRecords(cal);
+                    showStatus("Data",bfr.toString());
+                }
+
+            }
+        });
+
+        //view data from Incident Table
+        btn_IncdntData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                cal= db.getAllReportRecords();
+                if(cal.getCount()==0)
+                {
+                    showStatus("Information", "No record Found");
+                }
+                else{
+                    StringBuffer bfr;
+                    bfr = showIncRecords(cal);
+                    showStatus("Data",bfr.toString());
+                }
+
+            }
+        });
+
+        //Functionality of Report incident button
         btn_Report_Incident.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //make sure all the fields are filled before reporting incident
-                if(emp_no.getText().toString()=="" || shifSelection=="" || genderSelection=="" || incidentSelection=="")
+                if(emp_no.getText().toString()==null  || genderSelection==null|| incidentSelection==null)
                 {
-
                     Toast.makeText(getContext(),"EmpNo,Gender,Shift,Incident fields are mandatory",Toast.LENGTH_LONG).show();
                 }
                 else {
+                    //gathering all info of an employee
                     employeeNumber = emp_no.getText().toString();
-                    // EmployeeRecord
+                    // a of type EmployeeRecord
                     a=  db.getEmployeeRecord(employeeNumber);
                     name.setText(a.getEmployeeName());
                     department.setText(a.getDepartment());
@@ -199,12 +277,12 @@ public class ReportIncident extends Fragment {
             //gets all the fields value present on Report Incident Page and save it in String Builder
             sb = reportIncidentDetails(sb);
 
-            db.insertRecordIncident(employeeNumber,a.getEmployeeName(),genderSelection,a.getDepartment(),shifSelection, a.getPosition(),"head",incidentSelection
+            db.insertRecordIncident(currentDate,employeeNumber,a.getEmployeeName(),genderSelection,a.getDepartment(),shifSelection, a.getPosition(),"head",incidentSelection
             );
 
 
             Intent i = new Intent(Intent.ACTION_SEND);
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"chaitanyauttarwar046@gmail.com","Zzeefakarim5334@conestogac.on.ca"});     //setting up the email
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"Zzeefakarim5334@conestogac.on.ca"});     //setting up the email
             i.putExtra(Intent.EXTRA_SUBJECT, "HR Incident Reporting");                //Initializing the Email Subject
             i.putExtra(Intent.EXTRA_TEXT   , sb.toString());                                //intenting all the text data into the string
             i.setType("image/jpg");                                 //setting type of image format in jpg
@@ -221,6 +299,7 @@ public class ReportIncident extends Fragment {
         }
     }//end of onActivityResult
 
+    //Concat of all Employee detail...sent as email body
     private StringBuilder reportIncidentDetails(StringBuilder sb) {
 
         sb.append("Incident Date : " + currentDate);
@@ -244,6 +323,66 @@ public class ReportIncident extends Fragment {
         sb.append(System.getProperty("line.separator"));
 
         return sb;
+    }
+
+    //Iterate Employee table records using Cursor
+    public StringBuffer showEmpRecords(Cursor cr)
+    {
+        StringBuffer bfr = new StringBuffer();
+        bfr.append("Data"+"\n");
+        while(cr.moveToNext()) {
+            bfr.append("ID : " + cr.getString(0) + "\n");
+            bfr.append("FirstName : " + cr.getString(1) + "\n");
+            bfr.append("LastName : " + cr.getString(2) + "\n");
+            bfr.append("Marks : " + cr.getString(3) + "\n");
+
+            bfr.append("\n");
+        }
+        return bfr;
+    }
+
+    //Iterate Body table records using Cursor
+    public StringBuffer showBodyRecords(Cursor cr)
+    {
+        StringBuffer bfr = new StringBuffer();
+        bfr.append("Data"+"\n");
+        while(cr.moveToNext()) {
+            bfr.append("ID : " + cr.getString(0) + "\n");
+            bfr.append("FirstName : " + cr.getString(1) + "\n");
+            bfr.append("\n");
+        }
+        return bfr;
+    }
+
+    //Iterate Incident table records using Cursor
+    public StringBuffer showIncRecords(Cursor cr)
+    {
+        StringBuffer bfr = new StringBuffer();
+        bfr.append("Data"+"\n");
+        while(cr.moveToNext()) {
+            bfr.append("ID : " + cr.getString(0) + "\n");
+            bfr.append("FirstName : " + cr.getString(1) + "\n");
+            bfr.append("LastName : " + cr.getString(2) + "\n");
+            bfr.append("Marks : " + cr.getString(3) + "\n");
+            bfr.append("Marks : " + cr.getString(4) + "\n");
+            bfr.append("Marks : " + cr.getString(5) + "\n");
+            bfr.append("Marks : " + cr.getString(6) + "\n");
+            bfr.append("Marks : " + cr.getString(7) + "\n");
+            bfr.append("Marks : " + cr.getString(8) + "\n");
+            bfr.append("Marks : " + cr.getString(9) + "\n");
+            bfr.append("\n");
+        }
+        return bfr;
+    }
+
+
+    //Custom Dialog Builder
+    public void showStatus(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
 

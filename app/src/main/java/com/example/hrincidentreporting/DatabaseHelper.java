@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +29,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertRecord("Chaitnaya","API","API Designer");
         insertRecord("Saim Ahmad","Android","Android Developer");
 
-//        db.execSQL("drop table if exists tbl_BodyParts");
-//        db.execSQL(BodyParts.CREATE_BODY_PART_TABLE);
+        db.execSQL("drop table if exists tbl_BodyParts");
+        db.execSQL(BodyParts.CREATE_BODY_PART_TABLE);
 
-        //insertRecordBodyParts();
-
+        insertRecordBodyParts("Ankle-left");
+        boolean result =  insertRecordBodyParts("Ankle-right");
+        insertRecordBodyParts("Arm-Both");
+        insertRecordBodyParts("Arm-Left Upper");
+        insertRecordBodyParts("Arm-Right Upper");
 
     }
 
@@ -57,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param position    position of the employee
      * @return true if the records is inserted else false
      */
+    //Function to insert record in Employee Table
     public boolean insertRecord(String employeeName, String department, String position){
         //getting WritableDatabase permission to write into the DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -70,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long recordId = db.insert(EmployeeRecord.RECORD_TABLE_NAME, null, recordValues);
 
-        db.close();
+        //db.close();
 
         if(recordId == -1){
             return false;
@@ -79,8 +84,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public boolean insertRecordIncident(String employeeNumber, String employeeName, String gender,
+    //Function to insert record in Report Incident Table
+    public boolean insertRecordIncident(String incidentDate, String employeeNumber, String employeeName, String gender,
                                         String department, String shift, String position, String injuredBodyPart, String incidentType){
         //getting WritableDatabase permission to write into the DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -88,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //using ContentValues to put values to the columns
         ContentValues recordValues = new ContentValues();
 
-        //recordValues.put(IncidentHistoryRecord.COLUMN_INCIDENT_DATE,incidentDate);
+        recordValues.put(IncidentHistoryRecord.COLUMN_INCIDENT_DATE,incidentDate);
         recordValues.put(IncidentHistoryRecord.COLUMN_EMPLOYEE_NUMBER,employeeNumber);
         recordValues.put(IncidentHistoryRecord.COLUMN_EMPLOYEE_NAME,employeeName);
         recordValues.put(IncidentHistoryRecord.COLUMN_GENDER,gender);
@@ -103,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long recordId = db.insert(IncidentHistoryRecord.RECORD_TABLE_NAME, null, recordValues);
 
-        db.close();
+        //db.close();
 
         if(recordId == -1){
             return false;
@@ -112,21 +117,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public boolean insertRecordBodyParts(int bodyPartId,String bodyPartName){
+    //Function to insert record in Body Part Table
+    public boolean insertRecordBodyParts(String bodyPartName){
         //getting WritableDatabase permission to write into the DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         //using ContentValues to put values to the columns
         ContentValues recordValues = new ContentValues();
-
-        recordValues.put(BodyParts.COLUMN_BODY_PART_ID,bodyPartId);
         recordValues.put(BodyParts.COLUMN_BODY_PART_NAME,bodyPartName);
+        long recordId = db.insert(BodyParts.RECORD_TABLE_NAME, null, recordValues);
 
-
-        long recordId = db.insert(EmployeeRecord.RECORD_TABLE_NAME, null, recordValues);
-
-        db.close();
+        //db.close();
 
         if(recordId == -1){
             return false;
@@ -162,7 +163,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        db.close();
+        //db.close();
         return employeeRecord;
     }
 
@@ -178,14 +179,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //deleting the Student Record using the column ID
         db.delete(EmployeeRecord.RECORD_TABLE_NAME, EmployeeRecord.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(studentRecord.getId())});
-        db.close();
+        //db.close();
     }
 
     /**
      * Getting list of all employee records in the DB
      * @return Return a list of EmployeeRecords
      */
-    public Cursor getAllStudentRecords(){
+    //SQL query to fetch all records from Employee Table
+    public Cursor getAllEmpRecords(){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * From "+ EmployeeRecord.RECORD_TABLE_NAME,null);
         //List<EmployeeRecord> studentRecordList = new ArrayList<>();
@@ -213,4 +215,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //return studentRecordList;
 
     }
+
+    //SQL query to fetch all records from Report Incident Table
+    public Cursor getAllReportRecords(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * From "+ IncidentHistoryRecord.RECORD_TABLE_NAME,null);
+
+    }
+
+    //SQL query to fetch all records from Body Table
+    public Cursor getAllBodyRecords(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * From "+ BodyParts.RECORD_TABLE_NAME,null);
+    }
+
 }

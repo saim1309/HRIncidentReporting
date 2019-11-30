@@ -219,13 +219,11 @@
                     android:layout_weight="1"
                     android:text="@string/injured_body_part"
                     android:textSize="15sp"/>
-                <EditText
-                    android:id="@+id/edtInjuredPart"
+                <Spinner android:id="@+id/spinnerInjuredBodypart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:inputType="text"/>
+                    android:layout_marginRight="120dp"
+                    android:layout_weight="1"/>
             </TableRow>
 
             <TableRow android:layout_marginTop="8dp">
@@ -243,29 +241,54 @@
                     android:layout_gravity="center"/>
             </TableRow>
 
-            <TableRow android:layout_marginTop="8dp">
+            <TableRow android:layout_marginTop="4dp">
+
                 <Button
                     android:id="@+id/btn_ViewData"
-                    android:layout_width="match_parent"
+                    android:layout_width="30dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="8dp"
-                    android:text="View Data"
-                    android:textColor="@android:color/white"
-                    android:background="@color/colorPrimary"
                     android:layout_weight="1"
-                    android:layout_gravity="center"/>
+                    android:background="@color/colorPrimary"
+                    android:text="View Emp Data"
+                    android:textColor="@android:color/white" />
+            </TableRow>
+            <TableRow android:layout_marginTop="4dp">
+
+                <Button
+                    android:id="@+id/btn_IncdntData"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:text="View Incdnt Data"
+                    android:textColor="@android:color/white" />
+            </TableRow>
+
+            <TableRow android:layout_marginTop="4dp">
+
+                <Button
+                    android:id="@+id/btn_BodyData"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:text="View Body Data"
+                    android:textColor="@android:color/white" />
             </TableRow>
         </TableLayout>
 
-        <ImageView
-            android:id="@+id/img_photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            />
 
     </RelativeLayout>
 
