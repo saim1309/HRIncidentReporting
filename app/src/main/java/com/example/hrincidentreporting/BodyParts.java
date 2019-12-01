@@ -23,6 +23,7 @@ public class BodyParts {
                     + COLUMN_BODY_PART_NAME + " VARCHAR(40)"
                     + ")";
 
+
     public  BodyParts(){}
 
 

@@ -32,11 +32,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists tbl_BodyParts");
         db.execSQL(BodyParts.CREATE_BODY_PART_TABLE);
 
-        insertRecordBodyParts("Ankle-left");
-        boolean result =  insertRecordBodyParts("Ankle-right");
-        insertRecordBodyParts("Arm-Both");
-        insertRecordBodyParts("Arm-Left Upper");
-        insertRecordBodyParts("Arm-Right Upper");
+        insertRecordBodyParts("Ankle-left");insertRecordBodyParts("Ankle-right");
+        insertRecordBodyParts("Arm-Both");insertRecordBodyParts("Arm-Left Upper");insertRecordBodyParts("Arm-Right Upper");
+        insertRecordBodyParts("Back-All ");insertRecordBodyParts("Back-Lower");insertRecordBodyParts("Back-Middle");insertRecordBodyParts("Back-Upper");
+        insertRecordBodyParts("Chest"); insertRecordBodyParts("Face");
+        insertRecordBodyParts("Ear-Both");insertRecordBodyParts("Ear-left ");insertRecordBodyParts("Ear-Right");insertRecordBodyParts("Ears-Both");
+        insertRecordBodyParts("Elbow-Left");insertRecordBodyParts("Elbow-Right");
+        insertRecordBodyParts("Eye-both");insertRecordBodyParts("Eye-left");insertRecordBodyParts("Eye-right");
+        insertRecordBodyParts("Feet-Both");insertRecordBodyParts("Foot-left");insertRecordBodyParts("Foot-right");
+        insertRecordBodyParts("Forearm-left");insertRecordBodyParts("Forearm-right");
+        insertRecordBodyParts("Hand-left");insertRecordBodyParts("Hand-Palm-Left");insertRecordBodyParts("Hand-Palm-right");insertRecordBodyParts("Hand-right");insertRecordBodyParts("Hands-Both");
+        insertRecordBodyParts("Head-Rear");insertRecordBodyParts("Head-Front");insertRecordBodyParts("Head-Left");insertRecordBodyParts("Head-Right");
+        insertRecordBodyParts("Hip-Left");insertRecordBodyParts("Hip-Right");
+        insertRecordBodyParts("Index Finger-left");insertRecordBodyParts("Index Finger-right");
+        insertRecordBodyParts("Middle Finger-left");insertRecordBodyParts("Middle Finger-right");
+        insertRecordBodyParts("Ring Finger-left");insertRecordBodyParts("Ring Finger-right");
+        insertRecordBodyParts("Pinky Finger-left");insertRecordBodyParts("Pinky Finger-right");
+        insertRecordBodyParts("Thumb-left");insertRecordBodyParts("Thumb-right");
+        insertRecordBodyParts("Shoulder-left");insertRecordBodyParts("Shoulder-right");
+        insertRecordBodyParts("Wrist-left");insertRecordBodyParts("Wrist-right");
+        insertRecordBodyParts("Knee-left");insertRecordBodyParts("Knee-right");
+        insertRecordBodyParts("Leg-Both");insertRecordBodyParts("Leg-Left Lower");insertRecordBodyParts("Leg-Left Upper");insertRecordBodyParts("Leg-Right Lower");insertRecordBodyParts("Leg-Right Upper");
+        insertRecordBodyParts("Mouth");insertRecordBodyParts("Neck");insertRecordBodyParts("Nose");
+        insertRecordBodyParts("Groin");
+        insertRecordBodyParts("Abdomen");
+        insertRecordBodyParts("Internal");
+        insertRecordBodyParts("N/A");
+
+
+
+
+
+
+
+
 
     }
 
@@ -223,10 +252,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    //SQL query to fetch all records from Body Table
-    public Cursor getAllBodyRecords(){
+    //SQL query to clear all records from Report Incident Table
+    public void deleteAllReportRecords(){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * From "+ BodyParts.RECORD_TABLE_NAME,null);
+         db.rawQuery("DELETE From "+ IncidentHistoryRecord.RECORD_TABLE_NAME,null);
+
+    }
+
+
+    //SQL query to fetch all records from Body Table
+    public ArrayList<String> getAllBodyRecords(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result =  db.rawQuery("SELECT * From "+ BodyParts.RECORD_TABLE_NAME,null);
+        ArrayList<String> list = new ArrayList<String>();
+        while (result.moveToNext()) {
+            list.add(result.getString(1));
+        }
+        return list;
     }
 
 }

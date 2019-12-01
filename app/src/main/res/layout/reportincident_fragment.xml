@@ -272,21 +272,7 @@
                     android:textColor="@android:color/white" />
             </TableRow>
 
-            <TableRow android:layout_marginTop="4dp">
 
-                <Button
-                    android:id="@+id/btn_BodyData"
-                    android:layout_width="30dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:text="View Body Data"
-                    android:textColor="@android:color/white" />
-            </TableRow>
         </TableLayout>
 
 

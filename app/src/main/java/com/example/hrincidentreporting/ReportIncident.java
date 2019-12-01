@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -73,7 +74,7 @@ public class ReportIncident extends Fragment {
         emp_no = view.findViewById(R.id.edtEmployeeNumber);
         btn_Report_Incident = view.findViewById(R.id.btnOrder);
         editTextDate = view.findViewById(R.id.edtIncidentDate);
-        btn_BodyData = view.findViewById(R.id.btn_BodyData);
+        //btn_BodyData = view.findViewById(R.id.btn_BodyData);
         btn_IncdntData = view.findViewById(R.id.btn_IncdntData);
         injuredBodyPartSpiner = view.findViewById(R.id.spinnerInjuredBodypart);
 
@@ -97,12 +98,12 @@ public class ReportIncident extends Fragment {
         incidentTypeSpinnerList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         incidentTypeSpinner.setAdapter(incidentTypeSpinnerList);
 
-
+        //Adding values to the Shift spinner list
         shiftSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 shifSelection = shiftSpinner.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(),"Shift: "+shifSelection,Toast.LENGTH_LONG).show();
+               // Toast.makeText(getContext(),"Shift: "+shifSelection,Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -111,15 +112,21 @@ public class ReportIncident extends Fragment {
             }
         });
 
-        ArrayAdapter bodyPartSpinnerList = new ArrayAdapter(getActivity().getApplicationContext(),
-                android.R.layout.simple_spinner_dropdown_item,incidentTypeArray);
-        bodyPartSpinnerList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        injuredBodyPartSpiner.setAdapter(bodyPartSpinnerList);
+        //Adding values to the Body part spinner list
+
+        final List<String> incidentBodyPartList = db.getAllBodyRecords();
+
+        ArrayAdapter incidentBodyPartAdapter = new ArrayAdapter(getActivity().getApplicationContext(),
+                android.R.layout.simple_spinner_dropdown_item,incidentBodyPartList);
+
+        incidentBodyPartAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        injuredBodyPartSpiner.setAdapter(incidentBodyPartAdapter);
 
         injuredBodyPartSpiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 bodyPartSelection = injuredBodyPartSpiner.getItemAtPosition(position).toString();
+                //Toast.makeText(getContext(),"body part selected: "+bodyPartSelection,Toast.LENGTH_LONG).show();
 
             }
 
@@ -157,7 +164,7 @@ public class ReportIncident extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 incidentSelection = incidentTypeSpinner.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(),"Incident: "+incidentSelection,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),"Incident: "+incidentSelection,Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -188,23 +195,23 @@ public class ReportIncident extends Fragment {
             }
         });
 
-        //view data from Body Table
-        btn_BodyData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cal= db.getAllBodyRecords();
-                if(cal.getCount()==0)
-                {
-                    showStatus("Information", "No record Found");
-                }
-                else{
-                    StringBuffer bfr;
-                    bfr = showBodyRecords(cal);
-                    showStatus("Data",bfr.toString());
-                }
-
-            }
-        });
+//        //view data from Body Table
+//        btn_BodyData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cal= db.getAllBodyRecords();
+//                if(cal.getCount()==0)
+//                {
+//                    showStatus("Information", "No record Found");
+//                }
+//                else{
+//                    StringBuffer bfr;
+//                    bfr = showBodyRecords(cal);
+//                    showStatus("Data",bfr.toString());
+//                }
+//
+//            }
+//        });
 
         //view data from Incident Table
         btn_IncdntData.setOnClickListener(new View.OnClickListener() {
@@ -318,8 +325,7 @@ public class ReportIncident extends Fragment {
         sb.append(System.getProperty("line.separator"));
         sb.append("Incident Type : "+incidentSelection);
         sb.append(System.getProperty("line.separator"));
-//            need to get body part from table which will be prepared later
-        sb.append("Injured Body Part : Head");
+        sb.append("Injured Body Part : "+bodyPartSelection);
         sb.append(System.getProperty("line.separator"));
 
         return sb;

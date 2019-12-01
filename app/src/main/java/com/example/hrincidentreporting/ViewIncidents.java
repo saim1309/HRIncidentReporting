@@ -2,9 +2,11 @@ package com.example.hrincidentreporting;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 public class ViewIncidents extends Fragment {
     TextView tvViewIncident;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,7 @@ public class ViewIncidents extends Fragment {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.viewincidents_fragment, container, false);
         tvViewIncident = view.findViewById(R.id.tvViewIncident);
+        tvViewIncident.setMovementMethod(new ScrollingMovementMethod());
 
         DatabaseHelper db = new DatabaseHelper(getContext());
         Cursor res = db.getAllReportRecords();
@@ -39,6 +43,15 @@ public class ViewIncidents extends Fragment {
             tvViewIncident.append("INCIDENT_TYPE: " +res.getString(8)+ "\n");
             tvViewIncident.append("INCIDENT_BODY_PART: " +res.getString(9)+ "\n\n");
         }
+
+//        btn_clearIncidentRecords = view.findViewById(R.id.btn_clearIncidentRecords);
+//        btn_clearIncidentRecords.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DatabaseHelper db = new DatabaseHelper(getContext());
+//                db.deleteAllReportRecords();
+//            }
+//        });
 
 
 
