@@ -1,12 +1,16 @@
 package com.example.hrincidentreporting;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,15 +28,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = new DatabaseHelper(this);
 
-        // db.insertRecord("Zeefa","RPA","RPA Architect");
+        //dynamic camera and storage permission
+        try {
+            if(chkPermission(Manifest.permission.CAMERA))
+                Toast.makeText(this,"Camera permission available",Toast.LENGTH_LONG).show();
+            else {
+                ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.CAMERA},1);
+            }
+            if(chkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                Toast.makeText(this,"Storage Write permission available",Toast.LENGTH_LONG).show();
+            else {
+                ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+            }
+            if(chkPermission(Manifest.permission.READ_EXTERNAL_STORAGE))
+                Toast.makeText(this,"Storage Read permission available",Toast.LENGTH_LONG).show();
+            else {
+                ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},1);
+            }
+
+        }catch (Exception e)
+        {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
 
     }
 
     /**
      * Change the fragment when clicking on the Report Incident button and View Incident Button
-     * @param view
+     * @param
      */
 
+    public boolean chkPermission(String permission){
+        int check = ContextCompat.checkSelfPermission(this,permission);
+        return (check ==PackageManager.PERMISSION_GRANTED);
+    }
 
     public void onChangeFragment(View view){
         //checking if the id is matching with reportIncident Fragment
@@ -58,10 +87,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public   void takePhoto(){
 
-
-    }
 
 
 }
