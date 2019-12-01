@@ -25,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(EmployeeRecord.CREATE_EMPLOYEE_RECORD_TABLE);
         db.execSQL(IncidentHistoryRecord.CREATE_INCIDENT_HISTORY_RECORD_TABLE);
 
+        //insertion of data in Employee Table
         insertRecord("Zeefa Karim","RPA","RPA Architect");
         insertRecord("Chaitnaya","API","API Designer");
         insertRecord("Saim Ahmad","Android","Android Developer");
@@ -32,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("drop table if exists tbl_BodyParts");
         db.execSQL(BodyParts.CREATE_BODY_PART_TABLE);
 
+        //insertion of data in BodyParts Table
         insertRecordBodyParts("Ankle-left");insertRecordBodyParts("Ankle-right");
         insertRecordBodyParts("Arm-Both");insertRecordBodyParts("Arm-Left Upper");insertRecordBodyParts("Arm-Right Upper");
         insertRecordBodyParts("Back-All ");insertRecordBodyParts("Back-Lower");insertRecordBodyParts("Back-Middle");insertRecordBodyParts("Back-Upper");
@@ -54,18 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertRecordBodyParts("Knee-left");insertRecordBodyParts("Knee-right");
         insertRecordBodyParts("Leg-Both");insertRecordBodyParts("Leg-Left Lower");insertRecordBodyParts("Leg-Left Upper");insertRecordBodyParts("Leg-Right Lower");insertRecordBodyParts("Leg-Right Upper");
         insertRecordBodyParts("Mouth");insertRecordBodyParts("Neck");insertRecordBodyParts("Nose");
-        insertRecordBodyParts("Groin");
-        insertRecordBodyParts("Abdomen");
-        insertRecordBodyParts("Internal");
-        insertRecordBodyParts("N/A");
-
-
-
-
-
-
-
-
+        insertRecordBodyParts("Groin");insertRecordBodyParts("Abdomen");insertRecordBodyParts("Internal");insertRecordBodyParts("N/A");
 
     }
 
@@ -103,9 +94,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         recordValues.put(EmployeeRecord.COLUMN_POSITION,position);
 
         long recordId = db.insert(EmployeeRecord.RECORD_TABLE_NAME, null, recordValues);
-
-        //db.close();
-
         if(recordId == -1){
             return false;
         }
@@ -134,11 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         recordValues.put(IncidentHistoryRecord.COLUMN_INCIDENT_TYPE,incidentType);
         recordValues.put(IncidentHistoryRecord.COLUMN_INJURED_BODY_PART,injuredBodyPart);
 
-
         long recordId = db.insert(IncidentHistoryRecord.RECORD_TABLE_NAME, null, recordValues);
-
-        //db.close();
-
         if(recordId == -1){
             return false;
         }
@@ -155,8 +139,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues recordValues = new ContentValues();
         recordValues.put(BodyParts.COLUMN_BODY_PART_NAME,bodyPartName);
         long recordId = db.insert(BodyParts.RECORD_TABLE_NAME, null, recordValues);
-
-        //db.close();
 
         if(recordId == -1){
             return false;
@@ -219,29 +201,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllEmpRecords(){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * From "+ EmployeeRecord.RECORD_TABLE_NAME,null);
-        //List<EmployeeRecord> studentRecordList = new ArrayList<>();
-
-       // String allRecordQuery = null;
-
-        //Checking the progCode value
-       // allRecordQuery = "SELECT * FROM " + EmployeeRecord.RECORD_TABLE_NAME + " ORDER BY "
-                   // + EmployeeRecord.COLUMN_ID + " ASC";
-
-       // Cursor recordCursor = db.rawQuery(allRecordQuery,null);
-
-//        if(recordCursor != null && recordCursor.moveToFirst()){
-//            while(recordCursor.moveToNext()){
-//                EmployeeRecord studentRecord = new EmployeeRecord();
-//                studentRecord.setId(recordCursor.getInt(recordCursor.getColumnIndex(EmployeeRecord.COLUMN_ID)));
-//                studentRecord.setEmployeeName(recordCursor.getString(recordCursor.getColumnIndex(EmployeeRecord.COLUMN_EMPLOYEE_NAME)));
-//                studentRecord.setDepartment(recordCursor.getString(recordCursor.getColumnIndex(EmployeeRecord.COLUMN_DEPARTMENT)));
-//                studentRecord.setPosition(recordCursor.getString(recordCursor.getColumnIndex(EmployeeRecord.COLUMN_POSITION)));
-//
-//                studentRecordList.add(studentRecord);
-//            }
-//        }
-        //db.close();
-        //return studentRecordList;
 
     }
 

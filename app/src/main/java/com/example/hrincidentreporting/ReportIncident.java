@@ -42,9 +42,10 @@ public class ReportIncident extends Fragment {
     RadioGroup radioGroupGender;
     EmployeeRecord a = null;
     Cursor cal;
+    int empInt;
     boolean radioBtnChk = false;
     ImageView img;
-    String genderSelection,incidentSelection,shifSelection,currentDate,employeeNumber,bodyPartSelection;
+    String genderSelection,incidentSelection,shifSelection,currentDate,employeeNumber,bodyPartSelection,etEmpValue;
     StringBuilder sb;
     static final int CAM_REQUEST = 1;
     Uri imageUri;
@@ -75,8 +76,9 @@ public class ReportIncident extends Fragment {
         btn_Report_Incident = view.findViewById(R.id.btnOrder);
         editTextDate = view.findViewById(R.id.edtIncidentDate);
         //btn_BodyData = view.findViewById(R.id.btn_BodyData);
-        btn_IncdntData = view.findViewById(R.id.btn_IncdntData);
+        //btn_IncdntData = view.findViewById(R.id.btn_IncdntData);
         injuredBodyPartSpiner = view.findViewById(R.id.spinnerInjuredBodypart);
+        etEmpValue = emp_no.getText().toString();
 
 
 
@@ -112,24 +114,20 @@ public class ReportIncident extends Fragment {
             }
         });
 
-        //Adding values to the Body part spinner list
-
+        //ArrayList to get and store body parts from Db
         final List<String> incidentBodyPartList = db.getAllBodyRecords();
-
+        //Adding values to the Body part spinner list
         ArrayAdapter incidentBodyPartAdapter = new ArrayAdapter(getActivity().getApplicationContext(),
                 android.R.layout.simple_spinner_dropdown_item,incidentBodyPartList);
-
         incidentBodyPartAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         injuredBodyPartSpiner.setAdapter(incidentBodyPartAdapter);
-
+        //Listener for spinner selection
         injuredBodyPartSpiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 bodyPartSelection = injuredBodyPartSpiner.getItemAtPosition(position).toString();
                 //Toast.makeText(getContext(),"body part selected: "+bodyPartSelection,Toast.LENGTH_LONG).show();
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -159,7 +157,7 @@ public class ReportIncident extends Fragment {
         });
 
 
-        //check which incident was choosen
+        //check which incident was chosen
         incidentTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -174,9 +172,9 @@ public class ReportIncident extends Fragment {
         });
 
 
-        //creating a new DatabaseHelper object
-        db = new DatabaseHelper(getActivity().getApplicationContext());
-
+//        //creating a new DatabaseHelper object
+//        db = new DatabaseHelper(getActivity().getApplicationContext());
+//
         //view data from Employee Table
         btn_ViewData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,51 +211,61 @@ public class ReportIncident extends Fragment {
 //            }
 //        });
 
-        //view data from Incident Table
-        btn_IncdntData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                cal= db.getAllReportRecords();
-                if(cal.getCount()==0)
-                {
-                    showStatus("Information", "No record Found");
-                }
-                else{
-                    StringBuffer bfr;
-                    bfr = showIncRecords(cal);
-                    showStatus("Data",bfr.toString());
-                }
-
-            }
-        });
+//        //view data from Incident Table
+//        btn_IncdntData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                cal= db.getAllReportRecords();
+//                if(cal.getCount()==0)
+//                {
+//                    showStatus("Information", "No record Found");
+//                }
+//                else{
+//                    StringBuffer bfr;
+//                    bfr = showIncRecords(cal);
+//                    showStatus("Data",bfr.toString());
+//                }
+//
+//            }
+//        });
 
         //Functionality of Report incident button
         btn_Report_Incident.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                etEmpValue = emp_no.getText().toString();
+                //converting emp no to int iff its not empty
+                if(!etEmpValue.equals(""))
+                    empInt=Integer.parseInt(etEmpValue);
                 //make sure all the fields are filled before reporting incident
-                if(emp_no.getText().toString()==null  || genderSelection==null|| incidentSelection==null)
+                if(etEmpValue.equals("") || genderSelection==null)
                 {
-                    Toast.makeText(getContext(),"EmpNo,Gender,Shift,Incident fields are mandatory",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"EmpNo and Gender fields are mandatory",Toast.LENGTH_LONG).show();
+                }
+                //employee no should be present in Db
+                else if (empInt<0 || empInt>3) {
+                    Toast.makeText(getContext(), "We have only  3 employees...Please enter value b/w 1 and 3", Toast.LENGTH_LONG).show();
                 }
                 else {
                     //gathering all info of an employee
                     employeeNumber = emp_no.getText().toString();
                     // a of type EmployeeRecord
                     a=  db.getEmployeeRecord(employeeNumber);
+                    //populating values like name, dept and position based on employeeNumber
                     name.setText(a.getEmployeeName());
                     department.setText(a.getDepartment());
                     position.setText(a.getPosition());
 
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.Images.Media.TITLE, "AndroidImage");
-
+                    //
                     imageUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues );
-
+                    //initiate camera intent
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    //attaching image file
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    //starting camera activity
                     startActivityForResult(camera, CAM_REQUEST);
                 }
 
@@ -265,7 +273,6 @@ public class ReportIncident extends Fragment {
 
             }
         });
-
 
         return view;
     }// end of OnCreate
@@ -277,24 +284,26 @@ public class ReportIncident extends Fragment {
         super.onActivityResult(requestCode,resultCode,data);
         //Bitmap tempBitmap;
         if(requestCode==CAM_REQUEST && resultCode==RESULT_OK){
-//            Bundle extras = data.getExtras();
-//            Bitmap photo = (Bitmap) extras.get("data");
-//            img.setImageBitmap(photo);
             sb = new StringBuilder();
             //gets all the fields value present on Report Incident Page and save it in String Builder
             sb = reportIncidentDetails(sb);
-
-            db.insertRecordIncident(currentDate,employeeNumber,a.getEmployeeName(),genderSelection,a.getDepartment(),shifSelection, a.getPosition(),"head",incidentSelection
+            //function to insert all data in Incident Record Table
+            db.insertRecordIncident(currentDate,employeeNumber,a.getEmployeeName(),genderSelection,a.getDepartment(),shifSelection, a.getPosition(),bodyPartSelection,incidentSelection
             );
-
-
+            //intent for sending email
             Intent i = new Intent(Intent.ACTION_SEND);
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"Zzeefakarim5334@conestogac.on.ca"});     //setting up the email
-            i.putExtra(Intent.EXTRA_SUBJECT, "HR Incident Reporting");                //Initializing the Email Subject
-            i.putExtra(Intent.EXTRA_TEXT   , sb.toString());                                //intenting all the text data into the string
-            i.setType("image/jpg");                                 //setting type of image format in jpg
+            //adding recipient for the mail
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"Zzeefakarim5334@conestogac.on.ca"});
+            //adding subject for the email
+            i.putExtra(Intent.EXTRA_SUBJECT, "HR Incident Reporting");
+            //adding the mail body
+            i.putExtra(Intent.EXTRA_TEXT   , sb.toString());
+            //setting the attachment type as image
+            i.setType("image/jpg");
+            //adding attachment to the mail
             i.putExtra(Intent.EXTRA_STREAM, imageUri);
             try {
+                //starting activity and allow options for sending mail
                 startActivity(Intent.createChooser(i, "Send mail..."));
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(getContext(), "There are no email to send.", Toast.LENGTH_SHORT).show();

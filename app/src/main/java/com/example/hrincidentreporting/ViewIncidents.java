@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 
 public class ViewIncidents extends Fragment {
     TextView tvViewIncident;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +25,11 @@ public class ViewIncidents extends Fragment {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.viewincidents_fragment, container, false);
         tvViewIncident = view.findViewById(R.id.tvViewIncident);
+        //adding scroll features to see all records
         tvViewIncident.setMovementMethod(new ScrollingMovementMethod());
 
         DatabaseHelper db = new DatabaseHelper(getContext());
+        //fetch all the records from Report Incident and display in ViewIncident Page
         Cursor res = db.getAllReportRecords();
         while (res.moveToNext()){
             tvViewIncident.append("ID: " +res.getString(0)+ "\n");
@@ -52,8 +52,6 @@ public class ViewIncidents extends Fragment {
 //                db.deleteAllReportRecords();
 //            }
 //        });
-
-
 
         return view;
     }
