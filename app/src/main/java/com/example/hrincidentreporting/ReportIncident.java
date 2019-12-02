@@ -293,7 +293,7 @@ public class ReportIncident extends Fragment {
             //intent for sending email
             Intent i = new Intent(Intent.ACTION_SEND);
             //adding recipient for the mail
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"Zzeefakarim5334@conestogac.on.ca"});
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"tmathew@conestogac.on.ca"});
             //adding subject for the email
             i.putExtra(Intent.EXTRA_SUBJECT, "HR Incident Reporting");
             //adding the mail body
